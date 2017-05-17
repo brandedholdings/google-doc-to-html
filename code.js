@@ -12,7 +12,7 @@ function ConvertGoogleDocToCleanHtml() {
     }
 
     var html = output.join('\r');
-    emailHtml(html, images);
+        emailHtml(html, images);
 }
 
 function emailHtml(html, images) {
@@ -113,17 +113,16 @@ function processItem(item, listCounters, images) {
             if (gt === DocumentApp.GlyphType.BULLET
                     || gt === DocumentApp.GlyphType.HOLLOW_BULLET
                     || gt === DocumentApp.GlyphType.SQUARE_BULLET) {
-                prefix = '<ul class="list"><li>', suffix = "</li>";
-
-                    suffix += "</ul>";
+                    prefix = '<ul class="list">\n\t<li>', suffix = "</li>";
+                    suffix += "\n</ul>";
                 }
             else {
                 // Ordered list (<ol>):
-                prefix = '<ol class="list"><li>', suffix = '</li>';
+                prefix = '<ol class="list">\n\t<li>', suffix = '</li>';
             }
         }
         else {
-            prefix = "<li>";
+            prefix = "\t<li>";
             suffix = "</li>";
         }
 
@@ -135,7 +134,7 @@ function processItem(item, listCounters, images) {
             }
             else {
                 // Ordered list (<ol>):
-                suffix += "</ol>";
+                suffix += "\n</ol>";
             }
 
         }
@@ -170,8 +169,8 @@ function processItem(item, listCounters, images) {
 
 
 function processText(item, output) {
-    var text = item.getText();
-    var indices = item.getTextAttributeIndices();
+    var text = item.getText(),
+        indices = item.getTextAttributeIndices();
 
     if (indices.length <= 1) {
         // Assuming that a whole para fully italic is a quote
