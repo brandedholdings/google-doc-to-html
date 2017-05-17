@@ -34,7 +34,7 @@ function emailHtml(html, images) {
     MailApp.sendEmail({
          to: Session.getActiveUser().getEmail(),
          subject: name,
-         htmlBody: html,
+         htmlBody: 'Your converted, sanitized HTML is attached! :)',
          inlineImages: inlineImages,
          attachments: attachments
      });
