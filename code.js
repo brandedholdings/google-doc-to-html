@@ -76,9 +76,7 @@ function processItem(item, listCounters, images) {
             case DocumentApp.ParagraphHeading.HEADING2:
                 prefix = "<h2>", suffix = "</h2>"; break;
             case DocumentApp.ParagraphHeading.HEADING1:
-                prefix = "<h1>", suffix = "</h1>";
-
-                break;
+                prefix = "<h1>", suffix = "</h1>"; break;
             default: 
                 prefix = "<p>", suffix = "</p>";
         }
@@ -247,12 +245,13 @@ function processImage(item, images, output)
      * Use the document name as the image prefix
      */
     var documentName = DocumentApp.getActiveDocument().getName(),
+        imagePath = 'https://content.creditloan.com/wp-content/uploads/'
         imagePrefix = cleanFilename(documentName),
         imageCounter = images.length,
         fileName = imagePrefix + imageCounter + extension;
 
     imageCounter++;
-    output.push('<img src="' + fileName + '" alt="" />');
+    output.push('<img src="' + imagePath + fileName + '" alt="" />');
     images.push( {
         "blob": blob,
         "type": contentType,
