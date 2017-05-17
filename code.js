@@ -13,7 +13,6 @@ function ConvertGoogleDocToCleanHtml() {
 
     var html = output.join('\r');
     emailHtml(html, images);
-    //createDocumentForHtml(html, images);
 }
 
 function emailHtml(html, images) {
@@ -39,15 +38,6 @@ function emailHtml(html, images) {
          inlineImages: inlineImages,
          attachments: attachments
      });
-}
-
-function createDocumentForHtml(html, images) {
-    var name = DocumentApp.getActiveDocument().getName()+".html";
-    var newDoc = DocumentApp.create(name);
-    newDoc.getBody().setText(html);
-    for(var j=0; j < images.length; j++)
-        newDoc.getBody().appendImage(images[j].blob);
-    newDoc.saveAndClose();
 }
 
 function dumpAttributes(atts) {
