@@ -167,7 +167,7 @@ function processText(item, output) {
         else if(item.isItalic()) {
             output.push('<blockquote>' + text + '</blockquote>');
         }
-        else if (text.trim().indexOf('http://') == 0) {
+        else if (text.trim().indexOf('http://') == 0 || text.trim().indexOf('https://') == 0) {
             output.push('<a href="' + text + '">' + text + '</a>');
         }
         else {
@@ -200,7 +200,7 @@ function processText(item, output) {
             if (partText.indexOf('[')==0 && partText[partText.length-1] == ']') {
                 output.push('<sup>' + partText + '</sup>');
             }
-            else if (partText.trim().indexOf('http://') == 0) {
+            else if (partText.trim().indexOf('http://') == 0 || partText.trim().indexOf('https://') == 0) {
                 output.push('<a href="' + partText + '">' + partText + '</a>');
             }
             else {
