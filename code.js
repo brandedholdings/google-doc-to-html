@@ -66,6 +66,9 @@ function cleanOutput(output) {
     // remove empty list items
     .replace(/<li><\/li>/gi, '')
 
+    // convert tab character to 4-spaces tabs
+    .replace(/\t/gi, '    ')
+
     ; return output;
 }
 
@@ -159,6 +162,8 @@ function processItem(item, listCounters, images) {
 
         counter++;
         listCounters[key] = counter;
+    } else {
+        Logger.log(item.getType());
     }
 
     output.push(prefix);
