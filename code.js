@@ -162,8 +162,6 @@ function processItem(item, listCounters, images) {
 
         counter++;
         listCounters[key] = counter;
-    } else {
-        Logger.log(item.getType());
     }
 
     output.push(prefix);
