@@ -7,3 +7,5 @@
  4. Then from the Run menu, choose ConvertGoogleDocToCleanHtml
  5. A popup window will appear titled, Authorization required.
  6. You will get an email at your Google Account containing the HTML output of the Google Doc.
+
+Cloned from the [original GoogleDoc2Html repo](https://github.com/thejimbirch/GoogleDoc2Html)
