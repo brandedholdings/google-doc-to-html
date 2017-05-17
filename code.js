@@ -231,7 +231,7 @@ function processImage(item, images, output)
     var imageCounter = images.length;
     var name = imagePrefix + imageCounter + extension;
     imageCounter++;
-    output.push('<img src="cid:'+name+'" />');
+    output.push('<img src="cid:' + name + '" alt="" />');
     images.push( {
         "blob": blob,
         "type": contentType,
