@@ -24,25 +24,20 @@ function emailHtml(html, images) {
             "content": images[j].blob.getBytes() } );
     }
 
-    var inlineImages = {};
-    for (var j=0; j<images.length; j++) {
-        inlineImages[[images[j].name]] = images[j].blob;
-    }
-
     var documentName = DocumentApp.getActiveDocument().getName(),
-        name = cleanFilename(documentName) + ".html";
+        name = cleanFilename(documentName) + '.html';
 
     attachments.push({
         "fileName": name,
         "mimeType": "text/html",
         "content": html
     });
+
     MailApp.sendEmail({
-         to: Session.getActiveUser().getEmail(),
-         subject: name,
-         htmlBody: 'Your converted, sanitized HTML is attached! :)',
-         inlineImages: inlineImages,
-         attachments: attachments
+        to: Session.getActiveUser().getEmail(),
+        subject: name,
+        body: 'Your converted, sanitized HTML is attached! :)',
+        attachments: attachments
      });
 }
 
