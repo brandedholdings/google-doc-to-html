@@ -99,13 +99,13 @@ function processItem(item, listCounters, images) {
             if (gt === DocumentApp.GlyphType.BULLET
                     || gt === DocumentApp.GlyphType.HOLLOW_BULLET
                     || gt === DocumentApp.GlyphType.SQUARE_BULLET) {
-                prefix = '<ul><li>', suffix = "</li>";
+                prefix = '<ul class="list"><li>', suffix = "</li>";
 
                     suffix += "</ul>";
                 }
             else {
                 // Ordered list (<ol>):
-                prefix = "<ol><li>", suffix = "</li>";
+                prefix = '<ol class="list"><li>', suffix = '</li>';
             }
         }
         else {
