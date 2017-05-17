@@ -185,7 +185,7 @@ function processText(item, output) {
             Logger.log(partText);
 
             if (partAtts.ITALIC) {
-                output.push('<i>');
+                output.push('<em>');
             }
             if (partAtts.BOLD) {
                 output.push('<strong>');
@@ -208,7 +208,7 @@ function processText(item, output) {
             }
 
             if (partAtts.ITALIC) {
-                output.push('</i>');
+                output.push('</em>');
             }
             if (partAtts.BOLD) {
                 output.push('</strong>');
