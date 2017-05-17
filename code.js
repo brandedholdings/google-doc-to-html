@@ -29,8 +29,14 @@ function emailHtml(html, images) {
         inlineImages[[images[j].name]] = images[j].blob;
     }
 
-    var name = DocumentApp.getActiveDocument().getName()+".html";
-    attachments.push({"fileName":name, "mimeType": "text/html", "content": html});
+    var documentName = DocumentApp.getActiveDocument().getName(),
+        name = cleanFilename(documentName) + ".html";
+
+    attachments.push({
+        "fileName": name,
+        "mimeType": "text/html",
+        "content": html
+    });
     MailApp.sendEmail({
          to: Session.getActiveUser().getEmail(),
          subject: name,
@@ -38,6 +44,10 @@ function emailHtml(html, images) {
          inlineImages: inlineImages,
          attachments: attachments
      });
+}
+
+function cleanFilename(fileName) {
+    return fileName.replace(/ /g,'-').toLowerCase();
 }
 
 function dumpAttributes(atts) {
@@ -48,8 +58,9 @@ function dumpAttributes(atts) {
 }
 
 function processItem(item, listCounters, images) {
-    var output = [];
-    var prefix = "", suffix = "";
+    var output = [],
+        prefix = '',
+        suffix = '';
 
     if (item.getType() == DocumentApp.ElementType.PARAGRAPH) {
         switch (item.getHeading()) {
@@ -65,7 +76,9 @@ function processItem(item, listCounters, images) {
             case DocumentApp.ParagraphHeading.HEADING2:
                 prefix = "<h2>", suffix = "</h2>"; break;
             case DocumentApp.ParagraphHeading.HEADING1:
-                prefix = "<h1>", suffix = "</h1>"; break;
+                prefix = "<h1>", suffix = "</h1>";
+
+                break;
             default: 
                 prefix = "<p>", suffix = "</p>";
         }
@@ -73,8 +86,7 @@ function processItem(item, listCounters, images) {
         if (item.getNumChildren() == 0)
             return "";
     }
-    else if (item.getType() == DocumentApp.ElementType.INLINE_IMAGE)
-    {
+    else if (item.getType() == DocumentApp.ElementType.INLINE_IMAGE) {
         processImage(item, images, output);
     }
     else if (item.getType()===DocumentApp.ElementType.LIST_ITEM) {
@@ -215,9 +227,11 @@ function processText(item, output) {
 function processImage(item, images, output)
 {
     images = images || [];
-    var blob = item.getBlob();
-    var contentType = blob.getContentType();
-    var extension = "";
+
+    var blob = item.getBlob(),
+        contentType = blob.getContentType(),
+        extension = '';
+
     if (/\/png$/.test(contentType)) {
         extension = ".png";
     } else if (/\/gif$/.test(contentType)) {
@@ -227,13 +241,21 @@ function processImage(item, images, output)
     } else {
         throw "Unsupported image type: "+contentType;
     }
-    var imagePrefix = "Image_";
-    var imageCounter = images.length;
-    var name = imagePrefix + imageCounter + extension;
+
+    /*
+     * Build the images
+     * Use the document name as the image prefix
+     */
+    var documentName = DocumentApp.getActiveDocument().getName(),
+        imagePrefix = cleanFilename(documentName),
+        imageCounter = images.length,
+        fileName = imagePrefix + imageCounter + extension;
+
     imageCounter++;
-    output.push('<img src="cid:' + name + '" alt="" />');
+    output.push('<img src="' + fileName + '" alt="" />');
     images.push( {
         "blob": blob,
         "type": contentType,
-        "name": name});
+        "name": fileName
+    });
 }
