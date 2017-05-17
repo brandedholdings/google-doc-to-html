@@ -205,7 +205,7 @@ function processText(item, output) {
                 output.push('<strong>');
             }
             if (partAtts.UNDERLINE) {
-                output.push('<u>');
+                output.push('');
             }
 
             // If someone has written [xxx] and made this whole text some special font, like superscript
@@ -228,7 +228,7 @@ function processText(item, output) {
                 output.push('</strong>');
             }
             if (partAtts.UNDERLINE) {
-                output.push('</u>');
+                output.push('');
             }
 
         }
