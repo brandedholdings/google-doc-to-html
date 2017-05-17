@@ -46,8 +46,22 @@ function emailHtml(html, images) {
      });
 }
 
-function cleanFilename(fileName) {
-    return fileName.replace(/ /g,'-').toLowerCase();
+/*
+ * Clean up filenames
+ */
+function cleanFilename(name) {
+    var fileName = name.toLowerCase() // first, convert to lowercase
+
+    // strip non-alphanumeric characters (except spaces and periods)
+    .replace(/[^a-z0-9\s\.\-]/g, '')
+
+    // convert spaces to hyphens
+    .replace(/\s/g, '-')
+    
+    // remove ".doc/.docx" from filenames
+    .replace(/\.docx?/g, '')
+
+    ; return fileName;
 }
 
 function dumpAttributes(atts) {
@@ -248,7 +262,7 @@ function processImage(item, images, output)
         imagePath = 'https://content.creditloan.com/wp-content/uploads/'
         imagePrefix = cleanFilename(documentName),
         imageCounter = images.length,
-        fileName = imagePrefix + imageCounter + extension;
+        fileName = imagePrefix + '-' + imageCounter + extension;
 
     imageCounter++;
     output.push('<img src="' + imagePath + fileName + '" alt="" />');
