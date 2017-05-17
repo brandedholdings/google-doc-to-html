@@ -2,7 +2,7 @@
 ### Customized for use with specific BH properties ###
 
  1. Open your Google Doc and go to Tools menu, select Script Editor. You should see a new window open with a nice code editor. 
- 2. Copy and paste the code from here: [GoogleDocs2Html][1]
+ 2. Copy and paste the code from code.js
  3. Go to the File menu and Save the file the script as GoogleDoc2Html.
  4. Then from the Run menu, choose ConvertGoogleDocToCleanHtml
  5. A popup window will appear titled, Authorization required.
