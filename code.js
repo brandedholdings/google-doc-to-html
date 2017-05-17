@@ -12,27 +12,34 @@ function ConvertGoogleDocToCleanHtml() {
     }
 
     var html = output.join('\r');
-        emailHtml(html, images);
+
+    html = cleanOutput(html);
+    
+    emailHtml(html, images);
 }
 
 function emailHtml(html, images) {
-    var attachments = [];
+    var attachments = [],
+        documentName = DocumentApp.getActiveDocument().getName(),
+        name = cleanFilename(documentName) + '.html';
+
+    // image attachments
     for (var j=0; j<images.length; j++) {
         attachments.push( {
             "fileName": images[j].name,
             "mimeType": images[j].type,
-            "content": images[j].blob.getBytes() } );
+            "content": images[j].blob.getBytes()
+        });
     }
 
-    var documentName = DocumentApp.getActiveDocument().getName(),
-        name = cleanFilename(documentName) + '.html';
-
+    // the html document attachment
     attachments.push({
         "fileName": name,
         "mimeType": "text/html",
         "content": html
     });
 
+    // send the email
     MailApp.sendEmail({
         to: Session.getActiveUser().getEmail(),
         subject: name,
@@ -42,7 +49,28 @@ function emailHtml(html, images) {
 }
 
 /*
- * Clean up filenames
+ * Cleans up output
+ */
+function cleanOutput(output) {
+    var output = output // first, convert to lowercase
+
+    // encode ampersands
+    .replace(/&/g, '&amp;')
+
+    // convert single smart quotes
+    .replace(/’/g, '\'')
+
+    // convert double smart quotes
+    .replace(/(“|”)/g, '"')
+
+    // remove empty list items
+    .replace(/<li><\/li>/gi, '')
+
+    ; return output;
+}
+
+/*
+ * Cleans up filenames
  */
 function cleanFilename(name) {
     var fileName = name.toLowerCase() // first, convert to lowercase
@@ -92,11 +120,9 @@ function processItem(item, listCounters, images) {
 
         if (item.getNumChildren() == 0)
             return "";
-    }
-    else if (item.getType() == DocumentApp.ElementType.INLINE_IMAGE) {
+    } else if (item.getType() == DocumentApp.ElementType.INLINE_IMAGE) {
         processImage(item, images, output);
-    }
-    else if (item.getType()===DocumentApp.ElementType.LIST_ITEM) {
+    } else if (item.getType()===DocumentApp.ElementType.LIST_ITEM) {
         var listItem = item;
         var gt = listItem.getGlyphType();
         var key = listItem.getListId() + '.' + listItem.getNestingLevel();
@@ -106,17 +132,15 @@ function processItem(item, listCounters, images) {
         if ( counter == 0 ) {
             // Bullet list (<ul>):
             if (gt === DocumentApp.GlyphType.BULLET
-                    || gt === DocumentApp.GlyphType.HOLLOW_BULLET
-                    || gt === DocumentApp.GlyphType.SQUARE_BULLET) {
-                    prefix = '<ul class="list">\n\t<li>', suffix = "</li>";
-                    suffix += "\n</ul>";
-                }
-            else {
+                || gt === DocumentApp.GlyphType.HOLLOW_BULLET
+                || gt === DocumentApp.GlyphType.SQUARE_BULLET) {
+                prefix = '<ul class="list">\n\t<li>', suffix = "</li>";
+                suffix += "\n</ul>";
+            } else {
                 // Ordered list (<ol>):
                 prefix = '<ol class="list">\n\t<li>', suffix = '</li>';
             }
-        }
-        else {
+        } else {
             prefix = "\t<li>";
             suffix = "</li>";
         }
@@ -125,9 +149,8 @@ function processItem(item, listCounters, images) {
             if (gt === DocumentApp.GlyphType.BULLET
                     || gt === DocumentApp.GlyphType.HOLLOW_BULLET
                     || gt === DocumentApp.GlyphType.SQUARE_BULLET) {
-                suffix += "</ul>";
-            }
-            else {
+                suffix += "\n</ul>";
+            } else {
                 // Ordered list (<ol>):
                 suffix += "\n</ol>";
             }
@@ -142,10 +165,7 @@ function processItem(item, listCounters, images) {
 
     if (item.getType() == DocumentApp.ElementType.TEXT) {
         processText(item, output);
-    }
-    else {
-
-
+    } else {
         if (item.getNumChildren) {
             var numChildren = item.getNumChildren();
 
@@ -155,7 +175,6 @@ function processItem(item, listCounters, images) {
                 output.push(processItem(child, listCounters, images));
             }
         }
-
     }
 
     output.push(suffix);
@@ -171,19 +190,14 @@ function processText(item, output) {
         // Assuming that a whole para fully italic is a quote
         if(item.isBold()) {
             output.push('<strong>' + text + '</strong>');
-        }
-        else if(item.isItalic()) {
+        } else if(item.isItalic()) {
             output.push('<blockquote>' + text + '</blockquote>');
-        }
-        else if (text.trim().indexOf('http://') == 0 || text.trim().indexOf('https://') == 0) {
+        } else if (text.trim().indexOf('http://') == 0 || text.trim().indexOf('https://') == 0) {
             output.push('<a href="' + text + '">' + text + '</a>');
-        }
-        else {
+        } else {
             output.push(text);
         }
-    }
-    else {
-
+    } else {
         for (var i=0; i < indices.length; i ++) {
             var partAtts = item.getAttributes(indices[i]);
             var startPos = indices[i];
@@ -207,11 +221,9 @@ function processText(item, output) {
             // Unfortunately in Google Docs, there's no way to detect superscript
             if (partText.indexOf('[')==0 && partText[partText.length-1] == ']') {
                 output.push('<sup>' + partText + '</sup>');
-            }
-            else if (partText.trim().indexOf('http://') == 0 || partText.trim().indexOf('https://') == 0) {
+            } else if (partText.trim().indexOf('http://') == 0 || partText.trim().indexOf('https://') == 0) {
                 output.push('<a href="' + partText + '">' + partText + '</a>');
-            }
-            else {
+            } else {
                 output.push(partText);
             }
 
