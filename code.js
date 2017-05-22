@@ -141,7 +141,6 @@ function processItem(item, listCounters, images) {
                 || gt === DocumentApp.GlyphType.HOLLOW_BULLET
                 || gt === DocumentApp.GlyphType.SQUARE_BULLET) {
                 prefix = '<ul class="list">\n\t<li>', suffix = "</li>";
-                suffix += "\n</ul>";
             } else {
                 // Ordered list (<ol>):
                 prefix = '<ol class="list">\n\t<li>', suffix = '</li>';
