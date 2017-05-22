@@ -268,13 +268,14 @@ function processImage(item, images, output)
      * Use the document name as the image prefix
      */
     var documentName = DocumentApp.getActiveDocument().getName(),
-        imagePath = 'https://content.creditloan.com/wp-content/uploads/'
-        imagePrefix = cleanFilename(documentName),
+        imagePath = 'https://content.creditloan.com/wp-content/uploads/',
+        alt = item.getAltTitle() || '',
+        imagePrefix = cleanFilename(alt ? alt : documentName), // use image alt as image prefix if possible
         imageCounter = images.length,
         fileName = imagePrefix + '-' + imageCounter + extension;
 
     imageCounter++;
-    output.push('<img src="' + imagePath + fileName + '" alt="" />');
+    output.push('<img src="' + imagePath + fileName + '" alt="' + alt + '" />');
     images.push( {
         "blob": blob,
         "type": contentType,
