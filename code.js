@@ -66,6 +66,9 @@ function cleanOutput(output) {
     // convert double smart quotes
     .replace(/(“|”)/g, '"')
 
+    // convert nbsp to spaces (nbsp should not be used for forcing layout)
+    .replace(/&nbsp;/g, ' ')
+
     // remove empty list items
     .replace(/<li><\/li>/gi, '')
 
