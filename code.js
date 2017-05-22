@@ -57,6 +57,9 @@ function cleanOutput(output) {
     // encode ampersands
     .replace(/&/g, '&amp;')
 
+    // encode mdashes
+    .replace(/—/g, '&mdash;')
+
     // convert single smart quotes
     .replace(/’/g, '\'')
 
