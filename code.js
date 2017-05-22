@@ -202,21 +202,27 @@ function processText(item, output) {
         }
     } else {
         for (var i=0; i < indices.length; i ++) {
-            var partAtts = item.getAttributes(indices[i]);
-            var startPos = indices[i];
-            var endPos = i+1 < indices.length ? indices[i+1]: text.length;
-            var partText = text.substring(startPos, endPos);
+            var partAtts = item.getAttributes(indices[i]),
+                startPos = indices[i],
+                endPos = i+1 < indices.length ? indices[i+1]: text.length,
+                partText = text.substring(startPos, endPos);
 
             Logger.log(partText);
 
             if (partAtts.ITALIC) {
                 output.push('<em>');
             }
+
             if (partAtts.BOLD) {
                 output.push('<strong>');
             }
+
             if (partAtts.UNDERLINE) {
                 output.push('');
+            }
+
+            if (partAtts.LINK_URL) {
+                output.push('<a href="' + partAtts.LINK_URL + '">');
             }
 
             // If someone has written [xxx] and made this whole text some special font, like superscript
@@ -233,13 +239,18 @@ function processText(item, output) {
             if (partAtts.ITALIC) {
                 output.push('</em>');
             }
+
             if (partAtts.BOLD) {
                 output.push('</strong>');
             }
+
             if (partAtts.UNDERLINE) {
                 output.push('');
             }
 
+            if (partAtts.LINK_URL) {
+                output.push('</a>');
+            }
         }
     }
 }
