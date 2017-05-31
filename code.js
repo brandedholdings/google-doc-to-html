@@ -84,6 +84,9 @@ function cleanOutput(output) {
     // unwrap headings that contain only an img tag
     .replace(/<h[1-6]>\s*?(<img.*>)\s*?<\/h[1-6]>/g, '$1')
 
+    // remove strong tags from headings that start and end with strong tags
+    .replace(/(<h[1-6]>)\s*<strong>\s*(.*)\s*<\/strong>\s*(<\/h[1-6]>)/g, '$1$2$3')
+
     // convert tab character to 4-spaces tabs
     .replace(/\t/gi, '    ')
 
