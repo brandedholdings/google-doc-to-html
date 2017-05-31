@@ -75,6 +75,9 @@ function cleanOutput(output) {
     // remove empty strong tags containing only line breaks/carriage returns
     .replace(/<strong>\s+<\/strong>/gi, '')
 
+    // don't wrap [shortcodes][/shortcodes] in <p> tags
+    .replace(/<p>\s*?(\[.*\]\s*?.*\s*?\[\/.*\])\s*?<\/p>/gi, '$1')
+
     // convert tab character to 4-spaces tabs
     .replace(/\t/gi, '    ')
 
@@ -202,7 +205,11 @@ function processText(item, output) {
         if(item.isBold()) {
             output.push('<strong>' + text + '</strong>');
         } else if(item.isItalic()) {
-            output.push('<blockquote>' + text + '</blockquote>');
+            /*
+             * Use pullquote shortcode for blockquotes
+             * Remove all quotes from pullquote body as this is handled inside the shortcode processor for global styling
+             */
+            output.push('[pullquote style="full"]' + text.replace(/(“|”|")/g, '') + '[/pullquote]');
         } else {
             output.push(text);
         }
