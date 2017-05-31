@@ -75,11 +75,11 @@ function cleanOutput(output) {
     // remove empty strong tags containing only line breaks/carriage returns
     .replace(/<strong>\s+<\/strong>/gi, '')
 
-    // don't wrap [shortcodes][/shortcodes] in <p> tags
-    .replace(/<p>\s*?(\[.*\]\s*?.*\s*?\[\/.*\])\s*?<\/p>/gi, '$1')
-
     // remove empty shortcode tags
     .replace(/(\[.*\])\s*(\[\/\w*\])/g, '')
+
+    // don't wrap [shortcodes][/shortcodes] in <p> tags
+    .replace(/<p>\s*?(\[.*\]\s*?.*\s*?\[\/.*\])\s*?<\/p>/gi, '$1')
 
     // convert tab character to 4-spaces tabs
     .replace(/\t/gi, '    ')
