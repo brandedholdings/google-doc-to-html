@@ -72,6 +72,9 @@ function cleanOutput(output) {
     // remove empty list items
     .replace(/<li><\/li>/gi, '')
 
+    // remove empty <p> tags
+    .replace(/<p><\/p>/gi, '')
+
     // remove empty strong tags containing only line breaks/carriage returns
     .replace(/<strong>\s+<\/strong>/gi, '')
 
