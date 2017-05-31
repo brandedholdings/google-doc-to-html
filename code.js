@@ -78,6 +78,9 @@ function cleanOutput(output) {
     // don't wrap [shortcodes][/shortcodes] in <p> tags
     .replace(/<p>\s*?(\[.*\]\s*?.*\s*?\[\/.*\])\s*?<\/p>/gi, '$1')
 
+    // remove empty shortcode tags
+    .replace(/(\[.*\])\s*(\[\/\w*\])/g, '')
+
     // convert tab character to 4-spaces tabs
     .replace(/\t/gi, '    ')
 
@@ -209,7 +212,7 @@ function processText(item, output) {
              * Use pullquote shortcode for blockquotes
              * Remove all quotes from pullquote body as this is handled inside the shortcode processor for global styling
              */
-            output.push('[pullquote style="full"]' + text.replace(/(“|”|")/g, '') + '[/pullquote]');
+            output.push('\n[pullquote style="full"]' + text.replace(/(“|”|")/g, '') + '[/pullquote]\n');
         } else {
             output.push(text);
         }
