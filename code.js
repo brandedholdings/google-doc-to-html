@@ -108,11 +108,11 @@ function cleanFilename(name) {
     // convert spaces, periods and underscores to hyphens
     .replace(/[\s\._]/g, '-')
 
+    // condense multiple adjacent hyphens to a single hyphen
+    .replace(/-{2,}/g, '-')
+
     // remove leading and trailing hyphens
     .replace(/(^-)|(-$)/g, '')
-
-    // remove multiple adjacent hyphens
-    .replace(/-{2,}/g, '')
 
     ; return fileName;
 }
