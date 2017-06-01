@@ -102,14 +102,17 @@ function cleanOutput(output) {
 function cleanFilename(name) {
     var fileName = name.toLowerCase() // first, convert to lowercase
 
-    // strip non-alphanumeric characters (except spaces and periods)
+    // strip non-alphanumeric characters (except spaces, periods and hyphens)
     .replace(/[^a-z0-9\s\.\-]/g, '')
 
-    // convert spaces to hyphens
-    .replace(/\s/g, '-')
-    
-    // remove ".doc/.docx" from filenames
-    .replace(/\.docx?/g, '')
+    // convert spaces, periods and underscores to hyphens
+    .replace(/\s._/g, '-')
+
+    // remove leading and trailing hyphens
+    .replace(/(^-)|(-$)/g, '')
+
+    // remove multiple adjacent hyphens
+    .replace(/-{2,}/g, '')
 
     ; return fileName;
 }
@@ -309,7 +312,7 @@ function processImage(item, images, output)
         fileName = imagePrefix + '-' + imageCounter + extension;
 
     imageCounter++;
-    output.push('<img src="' + imagePath + fileName + '" alt="' + alt + '" />');
+    output.push('<img src="' + imagePath + fileName + '" alt="' + alt.replace(/(^\s)|(\s$)/g, '') + '" />'); // remove leading and trailing empty spaces from alt
     images.push( {
         "blob": blob,
         "type": contentType,
