@@ -106,7 +106,7 @@ function cleanFilename(name) {
     .replace(/[^a-z0-9\s\.\-]/g, '')
 
     // convert spaces, periods and underscores to hyphens
-    .replace(/\s._/g, '-')
+    .replace(/[\s\._]/g, '-')
 
     // remove leading and trailing hyphens
     .replace(/(^-)|(-$)/g, '')
