@@ -152,6 +152,8 @@ function processItem(item, listCounters, images) {
             return "";
     } else if (item.getType() == DocumentApp.ElementType.INLINE_IMAGE) {
         processImage(item, images, output);
+    } else if (item.getType() == DocumentApp.ElementType.TABLE) {
+        processTable(item, output);
     } else if (item.getType()===DocumentApp.ElementType.LIST_ITEM) {
         var listItem = item;
         var gt = listItem.getGlyphType();
@@ -210,6 +212,52 @@ function processItem(item, listCounters, images) {
     return output.join('');
 }
 
+function processTable(item, output) {
+    // open wrapper
+    output.push('\n\n<div class="table__wrapper">\n');
+
+    // open table
+    output.push('\t<table class="table">\n');
+    
+    var nCols = item.getChild(0).getNumCells();
+    
+    for (var i = 0; i < item.getNumChildren(); i++) {
+        /*
+         * Open thead and tbody
+         * Assumes the first row is the table header (as it should be)
+         */
+        if (i < 2) {
+            output.push('\t\t<t' + (i === 0 ? 'head' : 'body') + '>\n');
+        }
+
+        // add the row
+        output.push('\t\t\t<tr>\n');
+
+        // process the table cells
+        for (var j = 0; j < nCols; j++) {
+            var formatting = item.getChild(i).getChild(j).getAttributes(),
+                tag = (i === 0 || formatting.BOLD == true) ? 'th' : 'td'; // use th for thead cells and cells with bolded text
+
+            output.push('\t\t\t\t<' + tag + '>' + item.getChild(i).getChild(j).getText() + '</' + tag + '>\n');
+        }
+
+        output.push('\t\t\t</tr>\n');
+
+        // close thead
+        if (i === 0) {
+            output.push('\t\t</thead>\n');
+        }
+    }
+
+    // close tbody
+    output.push('\t\t</tbody>\n');
+
+    // close table
+    output.push('\t</table>\n');
+
+    // close wrapper
+    output.push('</div>\n\n');
+}
 
 function processText(item, output) {
     var text = item.getText(),
@@ -235,7 +283,7 @@ function processText(item, output) {
                 endPos = i+1 < indices.length ? indices[i+1]: text.length,
                 partText = text.substring(startPos, endPos);
 
-            Logger.log(partText);
+            // Logger.log(partText);
 
             if (partAtts.ITALIC) {
                 output.push('<em>');
