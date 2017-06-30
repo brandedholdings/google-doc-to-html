@@ -8,6 +8,7 @@ function ConvertGoogleDocToCleanHtml() {
     // Walk through all the child elements of the body.
     for (var i = 0; i < numChildren; i++) {
         var child = body.getChild(i);
+        
         output.push(processItem(child, listCounters, images));
     }
 
@@ -194,7 +195,9 @@ function processItem(item, listCounters, images) {
 
     output.push(prefix);
 
-    if (item.getType() == DocumentApp.ElementType.TEXT) {
+    if (item.getType() == DocumentApp.ElementType.TABLE) {
+        // do nothing; already handled
+    } else if (item.getType() == DocumentApp.ElementType.TEXT) {
         processText(item, output);
     } else {
         if (item.getNumChildren) {
@@ -214,7 +217,7 @@ function processItem(item, listCounters, images) {
 
 function processTable(item, output) {
     // open wrapper
-    output.push('\n\n<div class="table__wrapper">\n');
+    output.push('\n<div class="table__wrapper">\n');
 
     // open table
     output.push('\t<table class="table">\n');
@@ -256,7 +259,7 @@ function processTable(item, output) {
     output.push('\t</table>\n');
 
     // close wrapper
-    output.push('</div>\n\n');
+    output.push('</div>\n');
 }
 
 function processText(item, output) {
