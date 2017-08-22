@@ -12,7 +12,7 @@
 There are a few features that are specific to Branded Holdings content generation and usage.
 
 ##### Graphic List
-To generate a graphic list, first create a table with two columns:
+To generate a graphic list, first create a table with two columns and a separate row for each item:
 1. Column 1: Should contain the graphic-list image
 1. Column 2: Should contain the graphic-list content (text, headings, lists, etc.)
 
