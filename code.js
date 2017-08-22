@@ -73,9 +73,6 @@ function cleanOutput(output) {
     // remove empty list items
     .replace(/<li><\/li>/gi, '')
 
-    // remove empty <p> tags
-    .replace(/<p><\/p>/gi, '')
-
     // remove empty strong tags containing only line breaks/carriage returns
     .replace(/<strong>\s+<\/strong>/gi, '')
 
@@ -93,6 +90,12 @@ function cleanOutput(output) {
 
     // convert tab character to 4-spaces tabs
     .replace(/\t/gi, '    ')
+
+    // strip out custom component graphic-list
+    .replace(/\{\{graphic_list\}\}/gi, '')
+
+    // remove empty <p> tags
+    .replace(/<p><\/p>/gi, '')
 
     ; return output;
 }
@@ -154,7 +157,12 @@ function processItem(item, listCounters, images) {
     } else if (item.getType() == DocumentApp.ElementType.INLINE_IMAGE) {
         processImage(item, images, output);
     } else if (item.getType() == DocumentApp.ElementType.TABLE) {
-        processTable(item, output);
+        // check if table is the graphic-list component
+        if (item.findText('{{graphic_list}}')) {
+            processGraphicList(item, output);
+        } else {
+            processTable(item, output);
+        }
     } else if (item.getType()===DocumentApp.ElementType.LIST_ITEM) {
         var listItem = item;
         var gt = listItem.getGlyphType();
@@ -262,6 +270,34 @@ function processTable(item, output) {
     output.push('</div>\n');
 }
 
+// generate the graphic-list component from a table
+function processGraphicList(item, output) {
+    var listCounters = {},
+        images = [];
+
+    // open wrapper
+    output.push('\n<ul class="graphic-list">\n');
+    
+    var nCols = item.getChild(0).getNumCells();
+    
+    for (var i = 0; i < item.getNumChildren(); i++) {
+        // add the list item
+        output.push('\t<li class="graphic-list__item">\n');
+
+        // process the table cells
+        for (var j = 0; j < nCols; j++) {
+            var type = (j === 0) ? 'image' : 'content'; // image is always first cell, content second
+
+            output.push('\t\t<div class="graphic-list__' + type + '">\n\t\t\t' + processItem(item.getChild(i).getChild(j), listCounters, images) + '\n\t\t</div>\n');
+        }
+
+        output.push('\t</li>\n');
+    }
+
+    // close wrapper
+    output.push('</ul>\n');
+}
+
 function processText(item, output) {
     var text = item.getText(),
         indices = item.getTextAttributeIndices();
@@ -331,7 +367,6 @@ function processText(item, output) {
         }
     }
 }
-
 
 function processImage(item, images, output)
 {
