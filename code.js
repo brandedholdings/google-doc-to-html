@@ -176,9 +176,9 @@ function processItem(item, listCounters, images, imagePath) {
     } else if (item.getType() == DocumentApp.ElementType.TABLE) {
         // check if table is the graphic-list component
         if (item.findText('{{graphic_list}}')) {
-            processGraphicList(item, output, imagePath);
+            processGraphicList(item, listCounters, images, output, imagePath);
         } else {
-            processTable(item, output, imagePath);
+            processTable(item, listCounters, images, output, imagePath);
         }
     } else if (item.getType()===DocumentApp.ElementType.LIST_ITEM) {
         var listItem = item;
@@ -240,7 +240,7 @@ function processItem(item, listCounters, images, imagePath) {
     return output.join('');
 }
 
-function processTable(item, output, imagePath) {
+function processTable(item, listCounters, images, output, imagePath) {
     // open wrapper
     output.push('\n<div class="table__wrapper">\n');
 
@@ -288,10 +288,7 @@ function processTable(item, output, imagePath) {
 }
 
 // generate the graphic-list component from a table
-function processGraphicList(item, output, imagePath) {
-    var listCounters = {},
-        images = [];
-
+function processGraphicList(item, listCounters, images, output, imagePath) {
     // open wrapper
     output.push('\n<ul class="graphic-list">\n');
     
