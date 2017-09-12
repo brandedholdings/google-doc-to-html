@@ -111,6 +111,9 @@ function cleanOutput(output) {
     // strip out custom component graphic-list
     .replace(/\{\{graphic_list\}\}/gi, '')
 
+    // strip out custom component expander
+    .replace(/\{\{expander\}\}/gi, '')
+
     // remove empty <p> tags
     .replace(/<p><\/p>/gi, '')
 
@@ -177,6 +180,8 @@ function processItem(item, listCounters, images, imagePath) {
         // check if table is the graphic-list component
         if (item.findText('{{graphic_list}}')) {
             processGraphicList(item, listCounters, images, output, imagePath);
+        } if (item.findText('{{expander}}')) {
+            processExpander(item, listCounters, images, output, imagePath);
         } else {
             processTable(item, listCounters, images, output, imagePath);
         }
@@ -303,6 +308,31 @@ function processGraphicList(item, listCounters, images, output, imagePath) {
             var type = (j === 0) ? 'image' : 'content'; // image is always first cell, content second
 
             output.push('\t\t<div class="graphic-list__' + type + '">\n\t\t\t' + processItem(item.getChild(i).getChild(j), listCounters, images, imagePath) + '\n\t\t</div>\n');
+        }
+
+        output.push('\t</li>\n');
+    }
+
+    // close wrapper
+    output.push('</ul>\n');
+}
+
+// generate an expander from a table
+function processExpander(item, listCounters, images, output, imagePath) {
+    // open wrapper
+    output.push('\n<ul class="expander">\n');
+    
+    var nCols = item.getChild(0).getNumCells();
+    
+    for (var i = 0; i < item.getNumChildren(); i++) {
+        // add the list item
+        output.push('\t<li>\n');
+
+        // process the table cells
+        for (var j = 0; j < nCols; j++) {
+            var classes = (j === 0) ? 'expander__trigger expander--hidden' : 'expander__content'; // trigger is always first cell, content second
+
+            output.push('\t\t<div class="' + classes + '">\n\t\t\t' + processItem(item.getChild(i).getChild(j), listCounters, images, imagePath) + '\n\t\t</div>\n');
         }
 
         output.push('\t</li>\n');

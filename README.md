@@ -30,5 +30,16 @@ Then, insert the text `{{graphic_list}}` anywhere in the table. For example:
 
 Note: the text `{{graphic_list}}` will automatically be stripped out when output is generated.
 
+##### Expander
+To generate an expander list (e.g. for use in FAQs), first create a table with two columns and a separate row for each item:
+1. Column 1: Should contain the expander heading/trigger (e.g. FAQ question)
+1. Column 2: Should contain the expander content (e.g. FAQ answer)
+
+Then, insert the text `{{expander}}` anywhere in the table. For example:
+
+![Graphic list usage example](/examples/img/example-expander-table.png?raw=true)
+
+Note: the text `{{expander}}` will automatically be stripped out when output is generated. It is recommended you use the same formatting for all trigger (question) cells (Column 1), or else the expander will not look uniform.
+
 #### Attribution
 Cloned from the [original GoogleDoc2Html repo](https://github.com/thejimbirch/GoogleDoc2Html)
