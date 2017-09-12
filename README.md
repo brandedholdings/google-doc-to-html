@@ -12,6 +12,13 @@
 #### Branded Holdings-specific features
 There are a few features that are specific to Branded Holdings content generation and usage.
 
+##### Image Filename Prefixes
+To prefix all image filenames with some string, define it in the `processImage` function. For example, the following would result in image filenames such as `some-prefix-alt-text-1.jpg` and `some-prefix-alt-text-2.jpg`:
+
+```javascript
+imagePrefix = 'some-prefix', // add custom image prefix here (e.g. 'some-prefix')
+```
+
 ##### Graphic List
 To generate a graphic list, first create a table with two columns and a separate row for each item:
 1. Column 1: Should contain the graphic-list image

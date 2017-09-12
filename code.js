@@ -387,7 +387,8 @@ function processImage(item, images, output, imagePath) {
 
     var blob = item.getBlob(),
         contentType = blob.getContentType(),
-        extension = '';
+        extension = '',
+        fileName = '';
 
     if (/\/png$/.test(contentType)) {
         extension = ".png";
@@ -404,10 +405,21 @@ function processImage(item, images, output, imagePath) {
      * Use the document name as the image prefix
      */
     var documentName = DocumentApp.getActiveDocument().getName(),
+        imagePrefix = '', // add custom image prefix here (e.g. 'some-prefix')
         alt = item.getAltTitle() || '',
-        imagePrefix = cleanFilename(alt ? alt : documentName), // use image alt as image prefix if possible
-        imageCounter = images.length,
-        fileName = imagePrefix + '-' + imageCounter + extension;
+        imageCounter = images.length;
+
+    // allow custom image prefix
+    if (imagePrefix) {
+        fileName += imagePrefix + '-';
+    }
+
+    // use image alt as prefix if possible; else, use document name
+    fileName += alt ? alt : documentName;
+
+    // sanitize filename before use
+    // append image counter and extension
+    fileName = cleanFilename(fileName) + '-' + imageCounter + extension;
 
     imageCounter++;
     output.push('<img src="' + imagePath + fileName + '" alt="' + alt.replace(/(^\s)|(\s$)/g, '') + '" />'); // remove leading and trailing empty spaces from alt
