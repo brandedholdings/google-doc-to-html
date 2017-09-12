@@ -1,15 +1,32 @@
-function ConvertGoogleDocToCleanHtml() {
-    var body = DocumentApp.getActiveDocument().getBody();
-    var numChildren = body.getNumChildren();
-    var output = [];
-    var images = [];
-    var listCounters = {};
+function ConvertCreditLoan() {
+    init('CL');
+}
+
+function ConvertQuote() {
+    init('QT');
+}
+
+function init(site) {
+    var body = DocumentApp.getActiveDocument().getBody(),
+        numChildren = body.getNumChildren(),
+        output = [],
+        images = [],
+        listCounters = {},
+        config = {
+            CL: {
+                imagePath: 'https://content.creditloan.com/wp-content/uploads/'
+            },
+            QT: {
+                imagePath: 'https://content.quote.com/wp-content/uploads/'
+            }
+        },
+        imagePath = config[site].imagePath || '';
 
     // Walk through all the child elements of the body.
     for (var i = 0; i < numChildren; i++) {
         var child = body.getChild(i);
         
-        output.push(processItem(child, listCounters, images));
+        output.push(processItem(child, listCounters, images, imagePath));
     }
 
     var html = output.join('\r');
@@ -128,7 +145,7 @@ function dumpAttributes(atts) {
     }
 }
 
-function processItem(item, listCounters, images) {
+function processItem(item, listCounters, images, imagePath) {
     var output = [],
         prefix = '',
         suffix = '';
@@ -155,13 +172,13 @@ function processItem(item, listCounters, images) {
         if (item.getNumChildren() == 0)
             return "";
     } else if (item.getType() == DocumentApp.ElementType.INLINE_IMAGE) {
-        processImage(item, images, output);
+        processImage(item, images, output, imagePath);
     } else if (item.getType() == DocumentApp.ElementType.TABLE) {
         // check if table is the graphic-list component
         if (item.findText('{{graphic_list}}')) {
-            processGraphicList(item, output);
+            processGraphicList(item, output, imagePath);
         } else {
-            processTable(item, output);
+            processTable(item, output, imagePath);
         }
     } else if (item.getType()===DocumentApp.ElementType.LIST_ITEM) {
         var listItem = item;
@@ -214,7 +231,7 @@ function processItem(item, listCounters, images) {
             // Walk through all the child elements of the doc.
             for (var i = 0; i < numChildren; i++) {
                 var child = item.getChild(i);
-                output.push(processItem(child, listCounters, images));
+                output.push(processItem(child, listCounters, images, imagePath));
             }
         }
     }
@@ -223,7 +240,7 @@ function processItem(item, listCounters, images) {
     return output.join('');
 }
 
-function processTable(item, output) {
+function processTable(item, output, imagePath) {
     // open wrapper
     output.push('\n<div class="table__wrapper">\n');
 
@@ -271,7 +288,7 @@ function processTable(item, output) {
 }
 
 // generate the graphic-list component from a table
-function processGraphicList(item, output) {
+function processGraphicList(item, output, imagePath) {
     var listCounters = {},
         images = [];
 
@@ -288,7 +305,7 @@ function processGraphicList(item, output) {
         for (var j = 0; j < nCols; j++) {
             var type = (j === 0) ? 'image' : 'content'; // image is always first cell, content second
 
-            output.push('\t\t<div class="graphic-list__' + type + '">\n\t\t\t' + processItem(item.getChild(i).getChild(j), listCounters, images) + '\n\t\t</div>\n');
+            output.push('\t\t<div class="graphic-list__' + type + '">\n\t\t\t' + processItem(item.getChild(i).getChild(j), listCounters, images, imagePath) + '\n\t\t</div>\n');
         }
 
         output.push('\t</li>\n');
@@ -368,8 +385,7 @@ function processText(item, output) {
     }
 }
 
-function processImage(item, images, output)
-{
+function processImage(item, images, output, imagePath) {
     images = images || [];
 
     var blob = item.getBlob(),
@@ -383,7 +399,7 @@ function processImage(item, images, output)
     } else if (/\/jpe?g$/.test(contentType)) {
         extension = ".jpg";
     } else {
-        throw "Unsupported image type: "+contentType;
+        throw "Unsupported image type: " + contentType;
     }
 
     /*
@@ -391,7 +407,6 @@ function processImage(item, images, output)
      * Use the document name as the image prefix
      */
     var documentName = DocumentApp.getActiveDocument().getName(),
-        imagePath = 'https://content.creditloan.com/wp-content/uploads/',
         alt = item.getAltTitle() || '',
         imagePrefix = cleanFilename(alt ? alt : documentName), // use image alt as image prefix if possible
         imageCounter = images.length,
