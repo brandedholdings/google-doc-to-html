@@ -6,7 +6,7 @@
 * To add an image alt, select an image and navigate to Format > Alt text. Then, put the alt text in the _Title_ field.
 
 #### Instructions
-* Select the conversion function for the desired property (e.g. ConvertCreditLoan)
+* Select the conversion function for the desired property (e.g. convertCreditLoan)
 * [Link to additional instructions](https://howchoo.com/g/ymy2zjfjy2j/how-to-export-clean-html-from-google-docs)
 
 #### Branded Holdings-specific features
