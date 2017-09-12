@@ -1,8 +1,8 @@
-function ConvertCreditLoan() {
+function convertCreditLoan() {
     init('CL');
 }
 
-function ConvertQuote() {
+function convertQuote() {
     init('QT');
 }
 
