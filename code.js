@@ -114,6 +114,9 @@ function cleanOutput(output) {
     // strip out custom component expander
     .replace(/\{\{expander\}\}/gi, '')
 
+    // convert {{table_of_contents}} to HTML version
+    .replace(/<p>\s*\{\{table_of_contents\}\}\s*<\/p>/gi, '<div id="table-of-contents"></div>')
+
     // remove empty <p> tags
     .replace(/<p><\/p>/gi, '')
 

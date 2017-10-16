@@ -37,6 +37,9 @@ To generate an expander list (e.g. for use in FAQs), first create a table with t
 
 Then, insert the text `{{expander}}` anywhere in the table. For example:
 
-![Graphic list usage example](/examples/img/example-expander-table.png?raw=true)
+![Expander usage example](/examples/img/example-expander-table.png?raw=true)
 
 Note: the text `{{expander}}` will automatically be stripped out when output is generated. It is recommended you use the same formatting for all trigger (question) cells (Column 1), or else the expander will not look uniform.
+
+#### Table of Contents
+To generate the table of contents div (selector), insert the text `{{table_of_contents}}`, on its own line, wherever you'd like it to appear. It **should not** be embedded inside of a table or any other component.
