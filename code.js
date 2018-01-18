@@ -6,6 +6,10 @@ function convertQuote() {
     init('QT');
 }
 
+function convertDebtConsolidation() {
+    init('DC');
+}
+
 function init(site) {
     var body = DocumentApp.getActiveDocument().getBody(),
         numChildren = body.getNumChildren(),
@@ -14,10 +18,13 @@ function init(site) {
         listCounters = {},
         config = {
             CL: {
-                imagePath: 'https://content.creditloan.com/wp-content/uploads/'
+                imagePath: 'https://content.creditloan.com/media/'
             },
             QT: {
                 imagePath: 'https://content.quote.com/wp-content/uploads/'
+            },
+            DC: {
+                imagePath: 'https://content.debtconsolidation.com/media/'
             }
         },
         imagePath = config[site].imagePath || '';
