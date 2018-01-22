@@ -18,7 +18,7 @@ function init(site) {
         listCounters = {},
         config = {
             CL: {
-                imagePath: 'https://content.creditloan.com/media/'
+                imagePath: 'https://content.creditloan.com/wp-content/uploads/'
             },
             QT: {
                 imagePath: 'https://content.quote.com/wp-content/uploads/'
