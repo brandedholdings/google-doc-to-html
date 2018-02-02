@@ -190,7 +190,7 @@ function processItem(item, listCounters, images, imagePath) {
         // check if table is the graphic-list component
         if (item.findText('{{graphic_list}}')) {
             processGraphicList(item, listCounters, images, output, imagePath);
-        } if (item.findText('{{expander}}')) {
+        } else if (item.findText('{{expander}}')) {
             processExpander(item, listCounters, images, output, imagePath);
         } else {
             processTable(item, listCounters, images, output, imagePath);
