@@ -18,13 +18,13 @@ function init(site) {
         listCounters = {},
         config = {
             CL: {
-                imagePath: 'https://content.creditloan.com/wp-content/uploads/'
+                imagePath: 'https://www.creditloan.com/media/'
             },
             QT: {
                 imagePath: 'https://content.quote.com/wp-content/uploads/'
             },
             DC: {
-                imagePath: 'https://content.debtconsolidation.com/media/'
+                imagePath: 'https://www.debtconsolidation.com/media/'
             }
         },
         imagePath = config[site].imagePath || '';
