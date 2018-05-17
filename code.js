@@ -257,7 +257,7 @@ function processItem(item, listCounters, images, imagePath) {
 
 function processTable(item, listCounters, images, output, imagePath) {
     // open wrapper
-    output.push('\n<div class="table__wrapper">\n');
+    output.push('\n[Table]\n');
 
     // open table
     output.push('\t<table class="table">\n');
@@ -299,7 +299,7 @@ function processTable(item, listCounters, images, output, imagePath) {
     output.push('\t</table>\n');
 
     // close wrapper
-    output.push('</div>\n');
+    output.push('[/Table]\n');
 }
 
 // generate the graphic-list component from a table
