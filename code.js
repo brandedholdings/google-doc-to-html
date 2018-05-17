@@ -330,26 +330,26 @@ function processGraphicList(item, listCounters, images, output, imagePath) {
 // generate an expander from a table
 function processExpander(item, listCounters, images, output, imagePath) {
     // open wrapper
-    output.push('\n<ul class="expander">\n');
+    output.push('\n[Expander]\n');
     
     var nCols = item.getChild(0).getNumCells();
     
     for (var i = 0; i < item.getNumChildren(); i++) {
-        // add the list item
-        output.push('\t<li>\n');
-
         // process the table cells
         for (var j = 0; j < nCols; j++) {
-            var classes = (j === 0) ? 'expander__trigger expander--hidden' : 'expander__content'; // trigger is always first cell, content second
+            var type = (j === 0 ? 'title' : 'content'); // title is always first cell, content second
 
-            output.push('\t\t<div class="' + classes + '">\n\t\t\t' + processItem(item.getChild(i).getChild(j), listCounters, images, imagePath) + '\n\t\t</div>\n');
+            if (type === 'title') {
+                output.push('\t[ExpanderItem title="' + processItem(item.getChild(i).getChild(j), listCounters, images, imagePath) + '"]\n');
+            } else {
+                output.push('\t\t' + processItem(item.getChild(i).getChild(j), listCounters, images, imagePath) + '\n');
+                output.push('\t[/ExpanderItem]\n');
+            }
         }
-
-        output.push('\t</li>\n');
     }
 
     // close wrapper
-    output.push('</ul>\n');
+    output.push('[/Expander]\n');
 }
 
 function processText(item, output) {
