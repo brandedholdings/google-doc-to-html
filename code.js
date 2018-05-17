@@ -368,7 +368,7 @@ function processText(item, output) {
              * Use pullquote shortcode for blockquotes
              * Remove all quotes from pullquote body as this is handled inside the shortcode processor for global styling
              */
-            output.push('\n[pullquote style="full"]' + text.replace(/(“|”|")/g, '') + '[/pullquote]\n');
+            output.push('\n[PullQuote]\n\t' + text.replace(/(“|”|")/g, '') + '\n[/PullQuote]\n');
         } else {
             output.push(text);
         }
