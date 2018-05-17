@@ -104,7 +104,7 @@ function cleanOutput(output) {
     .replace(/<strong>\s+<\/strong>/gi, '')
 
     // remove empty shortcode tags
-    .replace(/(\[.*\])\s*(\[\/\w*\])/g, '')
+    .replace(/(\[[^/]*\])\s*(\[\/\w*\])/g, '')
 
     // don't wrap [shortcodes][/shortcodes] in <p> tags
     .replace(/<p>\s*?(\[.*\]\s*?.*\s*?\[\/.*\])\s*?<\/p>/gi, '$1')
@@ -229,11 +229,7 @@ function processItem(item, listCounters, images, imagePath) {
                 // Ordered list (<ol>):
                 suffix += "\n</ol>";
             }
-        } else {
-            Logger.log(item);
         }
-
-        Logger.log(suffix);
 
         counter++;
         listCounters[key] = counter;
