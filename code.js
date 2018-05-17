@@ -82,6 +82,9 @@ function cleanOutput(output) {
     // encode ampersands
     .replace(/&/g, '&amp;')
 
+    // persist intentionally-encoded ampersands
+    .replace(/&amp;quot;/g, '&quot;')
+
     // encode mdashes
     .replace(/—/g, '&mdash;')
 
@@ -207,13 +210,13 @@ function processItem(item, listCounters, images, imagePath) {
             if (gt === DocumentApp.GlyphType.BULLET
                 || gt === DocumentApp.GlyphType.HOLLOW_BULLET
                 || gt === DocumentApp.GlyphType.SQUARE_BULLET) {
-                prefix = '<ul class="list">\n\t<li>', suffix = "</li>";
+                prefix = '\n<ul class="list">\n\t<li>', suffix = "</li>";
             } else {
                 // Ordered list (<ol>):
-                prefix = '<ol class="list">\n\t<li>', suffix = '</li>';
+                prefix = '\n<ol class="list">\n\t<li>', suffix = '</li>';
             }
         } else {
-            prefix = "\t<li>";
+            prefix = "\n\t<li>";
             suffix = "</li>";
         }
 
@@ -226,8 +229,11 @@ function processItem(item, listCounters, images, imagePath) {
                 // Ordered list (<ol>):
                 suffix += "\n</ol>";
             }
-
+        } else {
+            Logger.log(item);
         }
+
+        Logger.log(suffix);
 
         counter++;
         listCounters[key] = counter;
@@ -333,19 +339,20 @@ function processExpander(item, listCounters, images, output, imagePath) {
     output.push('\n[Expander]\n');
     
     var nCols = item.getChild(0).getNumCells();
-    
+
     for (var i = 0; i < item.getNumChildren(); i++) {
         // process the table cells
         for (var j = 0; j < nCols; j++) {
             var type = (j === 0 ? 'title' : 'content'); // title is always first cell, content second
 
             if (type === 'title') {
-                output.push('\t[ExpanderItem title="' + processItem(item.getChild(i).getChild(j), listCounters, images, imagePath) + '"]\n');
+                output.push('\t[ExpanderItem title="' + item.getChild(i).getChild(j).getText().replace(/(?:\r\n|\r|\n)/g, '').replace(/("|“|”)/g, '&quot;') + '"]\n');
             } else {
                 output.push('\t\t' + processItem(item.getChild(i).getChild(j), listCounters, images, imagePath) + '\n');
-                output.push('\t[/ExpanderItem]\n');
             }
         }
+
+        output.push('\t[/ExpanderItem]\n');
     }
 
     // close wrapper
