@@ -4,6 +4,7 @@ A fork of the [original GoogleDoc2Html repo](https://github.com/thejimbirch/Goog
 ### Important notes
 * Image format in the Google Document should be _In line_ (the default option), not wrapped.
 * To add an image alt, select an image and navigate to Format > Alt text. Then, put the alt text in the _Title_ field.
+* Make sure there is an empty line above and beneath every image.
 
 ### Instructions
 * Select the conversion function for the desired property (e.g. convertCreditLoan)
